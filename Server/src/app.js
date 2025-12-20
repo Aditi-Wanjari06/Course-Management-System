@@ -18,10 +18,13 @@ app.use(cookieParser());
 import { userRouter } from "./routes/user.route.js";
 import { courseRouter } from "./routes/course.route.js";
 import { quizRouter } from "./routes/quiz.route.js";
+// import { resultRouter } from "./routes/result.route.js";
+import resultRouter from "./routes/result.route.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/courses", courseRouter);
 app.use("/api/v1/quiz", quizRouter);
+app.use("/api/v1/result", resultRouter)
 
 // Health check route
 app.get("/health", (req, res) => {
