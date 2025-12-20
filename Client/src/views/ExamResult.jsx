@@ -35,12 +35,14 @@ export default function ExamResult() {
   const percentage = Math.round((correct / questions.length) * 100);
 
 useEffect(() => {
+  if (!quiz || !questions.length) return;
+
   const submitResult = async () => {
     try {
-      const submit= await axios.post(
+      const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/result/submit`,
         {
-          userId: quiz.createdBy,
+          userId: quiz.createdBy, // ⚠️ see backend note below
           quizId: quiz._id,
           answers,
           totalQuestions: questions.length,
@@ -50,17 +52,18 @@ useEffect(() => {
           autoSubmitted: state?.autoSubmitted ?? false,
         }
       );
-      console.log("Submit", submit);
-      
+      console.log("Result submitted:", res.data);
     } catch (error) {
-      console.error("Result submit failed", error);
+      console.error(
+        "Result submit failed",
+        error.response?.data || error.message
+      );
     }
   };
 
-  if (quiz && questions.length) {
-    submitResult();
-  }
-}, []);
+  submitResult();
+}, [quiz, questions.length]);
+
 
 
 

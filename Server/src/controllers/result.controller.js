@@ -6,7 +6,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 /**
  * Submit Exam Result
  */
-export const submitResult = asyncHandler(async (req, res) => {
+ const submitResult = asyncHandler(async (req, res) => {
   const {
     userId,
     quizId,
@@ -39,7 +39,7 @@ export const submitResult = asyncHandler(async (req, res) => {
     autoSubmitted: autoSubmitted ?? false,
   });
 
-  if (!result) {
+ if (!result) {
     throw new ApiError(500, "Failed to submit result");
   }
 
@@ -51,7 +51,7 @@ export const submitResult = asyncHandler(async (req, res) => {
 /**
  * Get Result History of a User
  */
-export const getResultHistory = asyncHandler(async (req, res) => {
+ const getResultHistory = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
   if (!userId) {
@@ -66,3 +66,6 @@ export const getResultHistory = asyncHandler(async (req, res) => {
     new ApiResponse(200, results, "Result history fetched successfully")
   );
 });
+
+
+export {submitResult,getResultHistory}
