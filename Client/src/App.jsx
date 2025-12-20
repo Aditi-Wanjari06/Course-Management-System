@@ -1,51 +1,3 @@
-// import './App.css'
-// // import { Button } from '../../src/components'
-// import { Button } from './components'
-// import signupImg from './assets/Signup.png'
-// import { Link } from 'react-router-dom'
-// import bgImg from "./assets/bg-img.jpg"
-
-
-
-// function App() {
-
-//   return (
-//     <>
-//       <div
-//         className='flex items-center justify-center min-h-screen'
-//         style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-//         <div className='flex flex-row justify-center items-center gap-28 px-20 py-6 shadow-2xl duration-500'>
-
-//           <div className="flex flex-col items-center gap-4 ml-20">
-//             <Link to="/signup">
-//               <Button className='bg-red-600 text-white'>Signup</Button>
-//             </Link>
-//             <span>OR</span>
-//             <Link to="/login">
-//               <Button className='bg-red-600 text-white' >Login</Button>
-//             </Link>
-//           </div>
-//           <div className='border-l-4 '>
-//             <img src={signupImg} alt='signup'
-//               style={{ height: "450px" }}
-//               className='pl-11'
-//             />
-//           </div>
-//           <div>
-
-//           </div>
-//         </div>
-
-//       </div>
-//     </>
-//   )
-// }
-
-// export default App
-
-
-
-
 import "./App.css";
 import { Button } from "./components";
 import signupImg from "./assets/Signup.png";
@@ -60,9 +12,11 @@ function App() {
       <div
         className="flex items-center justify-center min-h-screen backdrop-blur-sm"
         style={{
-          backgroundImage: `url(${bgImg})`,
+          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.32)), url(${bgImg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+       
+          
         }}
       >
         <motion.div
@@ -127,7 +81,7 @@ function App() {
             <img
               src={signupImg}
               alt="signup"
-              style={{ height: "450px" }}
+              style={{ height: "350px" }}
               className="rounded-xl shadow-md"
             />
           </motion.div>

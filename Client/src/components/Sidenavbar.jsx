@@ -738,7 +738,7 @@ export default function Sidenavbar() {
   const userRole = JSON.parse(localStorage.getItem("user"))?.user?.role;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box >
       <CssBaseline />
 
       <Drawer variant="permanent" open={open}>

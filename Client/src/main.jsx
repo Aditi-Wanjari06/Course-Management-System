@@ -19,6 +19,7 @@ import PerformanceOverview from "../src/views/PerformanceOverview.jsx";
 import EditProfile from "../src/components/EditProfile.jsx";
 import CreateExam from "./views/CreateExam.jsx";
 import ExamPage from "../src/views/ExamPage.jsx";
+import ExamResult from "./views/ExamResult.jsx";
 import StudentDashboard from "../src/views/StudentDashboard.jsx";
 import Courses from "./views/Courses.jsx";
 import CoursePreview from "./views/CoursePreview.jsx";
@@ -40,6 +41,7 @@ createRoot(document.getElementById("root")).render(
       <Route path="/teacher" element={<Teacher />} />
       <Route path="/createExam" element={<CreateExam />} />
       <Route path="/examPage/:id" element={<ExamPage />} />
+      <Route path="/exam/:id/result" element={<ExamResult />} />
       <Route path="/studentDashboard" element={<StudentDashboard />} />
       <Route path="/createCourse" element={<CreateCourseForm />} />
       <Route path="/course" element={<Courses />} />
