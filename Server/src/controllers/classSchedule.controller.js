@@ -4,9 +4,9 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const createClassSchedule = asyncHandler(async (req, res) => {
-  const { subject, teacher, time, day } = req.body;
+  const { subject, teacher, time, date } = req.body;
 
-  if (!subject || !teacher || !time || !day) {
+  if (!subject || !teacher || !time || !date) {
     throw new ApiError(400, "All fields are required");
   }
 
@@ -14,6 +14,7 @@ const createClassSchedule = asyncHandler(async (req, res) => {
     subject,
     teacher,
     time,
+    date
   });
 
   
