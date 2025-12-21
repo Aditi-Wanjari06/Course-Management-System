@@ -30,8 +30,6 @@ const courseCreation = asyncHandler(async (req, res) => {
     createdBy,
   });
 
-  console.log(course);
-
   const createdCourse = await Course.findById(course._id);
 
   if (!createdCourse) {
@@ -44,7 +42,7 @@ const courseCreation = asyncHandler(async (req, res) => {
 });
 
 const getAllCourses = asyncHandler(async (req, res) => {
-  const courses = await Course.find();
+  const courses = await Course.find().sort({createdAt: -1 });
 
   if (!courses) {
     throw new ApiError(409, "Courses not found");
@@ -52,7 +50,7 @@ const getAllCourses = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, courses, "Courses fetched successfully"));
+    .json(new ApiResponse(200, courses, "Courses fetched"));
 });
 
 const updateCourse = asyncHandler(async (req, res) => {
