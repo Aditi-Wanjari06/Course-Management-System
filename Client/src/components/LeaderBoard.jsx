@@ -55,8 +55,8 @@ export default function CustomizedTables() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
+          {rows.map((row,index) => (
+            <StyledTableRow key={index}>
               <StyledTableCell component="th" scope="row" align='center'>
                 {row.Rank}
               </StyledTableCell>

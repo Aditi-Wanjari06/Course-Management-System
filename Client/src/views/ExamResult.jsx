@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Navbar } from "../components";
 import Sidenavbar from "../components/Sidenavbar";
 import { Box } from "@mui/material";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { useEffect } from "react";
 import {
   CheckCircle2,
   XCircle,
@@ -17,55 +16,120 @@ import {
 export default function ExamResult() {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const submittedRef = useRef(false); // 🔐 prevents multiple submits
 
-  if (!state) {
+  if (!state?.quiz || !state?.answers) {
     return <div className="text-center mt-10">No result data found</div>;
   }
 
-  const { quiz, answers } = state;
+  const { quiz, answers, autoSubmitted } = state;
   const questions = quiz.questions || [];
 
-  const attempted = Object.keys(answers).length;
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  const correct = questions.reduce((count, q, index) => {
-    return answers[index] === q.correctAnswer ? count + 1 : count;
-  }, 0);
+  /* ---------------- RESULT CALCULATION ---------------- */
 
-  const incorrect = attempted - correct;
-  const percentage = Math.round((correct / questions.length) * 100);
+  const result = useMemo(() => {
+  let attempted = 0;
+  let correct = 0;
+
+  questions.forEach((q) => {
+    const userAnswer = answers[q._id];
+
+    if (userAnswer !== undefined) {
+      attempted++;
+      if (userAnswer === q.correctAnswer) {
+        correct++;
+      }
+    }
+  });
+
+  return {
+    attempted,
+    correct,
+    incorrect: attempted - correct,
+    percentage: questions.length
+      ? Math.round((correct / questions.length) * 100)
+      : 0,
+  };
+}, [questions, answers]);
+
+  /* ---------------- SUBMIT RESULT (ONCE) ---------------- */
+
+//   useEffect(() => {
+//     if (
+//       submittedRef.current ||
+//       !user?._id ||
+//       !quiz?._id ||
+//       questions.length === 0
+//     ) {
+//       return;
+//     }
+
+//     submittedRef.current = true;
+
+//     const submitResult = async () => {
+//       try {
+//         await axios.post(
+//           `${import.meta.env.VITE_API_URL}/api/v1/result/submit`,
+//           {
+//             userId: user._id,
+//             quizId: quiz._id,
+//             answers,
+//             totalQuestions: questions.length,
+//             attempted: result.attempted,
+//             correct: result.correct,
+//             percentage: result.percentage,
+//             autoSubmitted: autoSubmitted ?? false,
+//           }
+//         );
+//       } catch (error) {
+//         console.error(
+//           "Result submit failed",
+//           error.response?.data || error.message
+//         );
+//       }
+//     };
+
+//     submitResult();
+//   }, [quiz._id]);
+
+
 
 useEffect(() => {
-  if (!quiz || !questions.length) return;
+  if (submittedRef.current) return;
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user?._id || !quiz?._id || questions.length === 0) return;
+
+  submittedRef.current = true;
 
   const submitResult = async () => {
     try {
-      const res = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/result/submit`,
         {
-          userId: quiz.createdBy, // ⚠️ see backend note below
+          userId: user._id,
           quizId: quiz._id,
           answers,
           totalQuestions: questions.length,
-          attempted,
-          correct,
-          percentage,
+          attempted: result.attempted,
+          correct: result.correct,
+          percentage: result.percentage,
           autoSubmitted: state?.autoSubmitted ?? false,
         }
       );
-      console.log("Result submitted:", res.data);
-    } catch (error) {
-      console.error(
-        "Result submit failed",
-        error.response?.data || error.message
-      );
+    } catch (err) {
+      console.error("Result submit failed", err);
     }
   };
 
   submitResult();
-}, [quiz, questions.length]);
+}, [quiz?._id, result]);
 
 
-
+  /* ---------------- UI ---------------- */    
 
   return (
     <div className="bg-gray-100 min-h-screen overflow-x-hidden">
@@ -95,17 +159,17 @@ useEffect(() => {
               <ResultCard
                 icon={<CheckCircle2 className="text-green-600" />}
                 label="Attempted"
-                value={attempted}
+                value={result.attempted}
               />
               <ResultCard
                 icon={<CheckCircle2 className="text-blue-600" />}
                 label="Correct"
-                value={correct}
+                value={result.correct}
               />
               <ResultCard
                 icon={<XCircle className="text-red-500" />}
                 label="Incorrect"
-                value={incorrect}
+                value={result.incorrect}
               />
             </div>
 
@@ -115,7 +179,7 @@ useEffect(() => {
                 <Percent /> Score
               </div>
               <span className="text-3xl font-bold text-blue-800">
-                {percentage}%
+                {result.percentage}%
               </span>
             </div>
 
@@ -136,6 +200,8 @@ useEffect(() => {
     </div>
   );
 }
+
+/* ---------------- CARD ---------------- */
 
 function ResultCard({ icon, label, value }) {
   return (

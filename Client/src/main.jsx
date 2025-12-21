@@ -28,6 +28,8 @@ import UpdateCourse from "../src/components/UpdateCourse.jsx";
 import EmailNotification from "./views/EmailNotification.jsx";
 import AttendanceGrade from "./views/AttendanceGrade.jsx";
 import CreateCourseForm from "./views/createCourse.jsx";
+import CreateAnnouncement from "./views/CreateAnnouncement.jsx";
+import CreateClassSchedule from "./views/createClassSchedule.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -57,6 +59,8 @@ createRoot(document.getElementById("root")).render(
       <Route path="/communication" element={<CommunicationPage />} />
       <Route path="/signout" element={<Signout />} />
       <Route path="/email" element={<EmailNotification />} />
+      <Route path="/addSchedule" element={<CreateClassSchedule />} />
+      <Route path="/addAnnouncement" element={<CreateAnnouncement />} />
     </Routes>
   </BrowserRouter>
 );
