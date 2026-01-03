@@ -1,12 +1,11 @@
 import { Router } from "express";
 
 import { createAnnouncement,getAnnouncement } from "../controllers/announcement.contoller.js";
-import { verifyJWT } from "../middleware/auth.middleware.js";
 
 const announcementRouter = Router();
 
-announcementRouter.post("/createAnnouncement",verifyJWT, createAnnouncement);
-announcementRouter.get("/getAnnouncement", verifyJWT,getAnnouncement);
+announcementRouter.post("/createAnnouncement",createAnnouncement);
+announcementRouter.get("/getAnnouncement",getAnnouncement);
 
 
 export { announcementRouter };
