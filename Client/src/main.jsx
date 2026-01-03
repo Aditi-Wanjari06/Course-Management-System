@@ -29,7 +29,7 @@ import EmailNotification from "./views/EmailNotification.jsx";
 import AttendanceGrade from "./views/AttendanceGrade.jsx";
 import CreateCourseForm from "./views/createCourse.jsx";
 import CreateAnnouncement from "./views/CreateAnnouncement.jsx";
-import CreateClassSchedule from "./views/createClassSchedule.jsx";
+import CreateClassSchedule from "./views/CreateClassSchedule.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
