@@ -37,7 +37,7 @@ export default function CreateClassSchedule() {
     };
 
     try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/schedule/createClassSchedule`,payload
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/schedule/createSchedule`,payload
         );
         console.log("Schedule created",response.data);
         
