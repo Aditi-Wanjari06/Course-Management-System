@@ -25,6 +25,7 @@ export default function CreateClassSchedule() {
   const handleInputChange = async(e)=>{
  setForm({ ...form, [e.target.name]: e.target.value });
   }
+
   const handleSubmit = async (e) =>{
     e.preventDefault();
 
@@ -37,8 +38,8 @@ export default function CreateClassSchedule() {
 
     try {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/schedule/createClassSchedule`,payload
-        )
-        console.log("Schedule created",response);
+        );
+        console.log("Schedule created",response.data);
         
         
     } catch (error) {
