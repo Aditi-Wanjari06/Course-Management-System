@@ -22,6 +22,16 @@ export default function CreateClassSchedule() {
   const handleInputChange = async (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  const formatTimeAMPM = (time) => {
+    if (!time) return "";
+
+    const [hours, minutes] = time.split(":");
+    const h = parseInt(hours, 10);
+    const ampm = h >= 12 ? "PM" : "AM";
+    const hour12 = h % 12 || 12;
+
+    return `${hour12}:${minutes} ${ampm}`;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +40,9 @@ export default function CreateClassSchedule() {
       subject: form.subject,
       teacher: form.teacher,
       date: form.date,
-      time: `${form.startTime} - ${form.endTime}`,
+      time: `${formatTimeAMPM(form.startTime)} - ${formatTimeAMPM(
+        form.endTime
+      )}`,
     };
 
     try {
@@ -48,7 +60,6 @@ export default function CreateClassSchedule() {
       } else {
         toast.error(response.data.message || "Failed!");
       }
-    
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed. Please try again.");
     }
@@ -129,7 +140,7 @@ export default function CreateClassSchedule() {
               onClick={handleSubmit}
               className="w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold shadow hover:bg-blue-700 transition"
             >
-              Save Schedule
+              Add Schedule
             </motion.button>
           </form>
         </motion.div>

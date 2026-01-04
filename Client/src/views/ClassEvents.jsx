@@ -7,30 +7,16 @@ import { FaCalendarAlt, FaBullhorn, FaChalkboardTeacher, FaClock } from "react-i
 import toast,{Toaster} from 'react-hot-toast';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import axios from 'axios';
 
 const ScheduleAndAnnouncements = () => {
-  const schedule = [
-    { time: "09:00 AM - 10:00 AM", subject: "Mathematics", teacher: "Mrs. Sharma" },
-    { time: "10:15 AM - 11:15 AM", subject: "Science", teacher: "Mr. Verma" },
-    { time: "11:30 AM - 12:30 PM", subject: "English", teacher: "Ms. Roy" },
-    { time: "01:00 PM - 02:00 PM", subject: "Computer", teacher: "Mr. Singh" },
-    { time: "02:15 PM - 03:15 PM", subject: "History", teacher: "Ms. Das" },
-  ];
-
-  const announcements = [
-    { date: "2025-06-19", message: "Parent-teacher meeting scheduled for June 25." },
-    { date: "2025-06-18", message: "Science project submission deadline is June 22." },
-    { date: "2025-06-17", message: "Math Olympiad registration closes June 20." },
-    { date: "2025-06-16", message: "Sports Day practice from next week." },
-  ];
-
 const [newSchedule,setNewSchedule] = useState([])
+const [newAnnouncement, setNewAnnouncement] = useState([])
 
 useEffect(()=>{
   const getNewSchedule =async ()=>{
     try {
       const response = await axios.get( `${import.meta.env.VITE_API_URL}/api/v1/schedule/getSchedule`)
-
       setNewSchedule(response.data.message);
       
     } catch (error) {
@@ -39,6 +25,20 @@ useEffect(()=>{
 
   }
   getNewSchedule();
+},[])
+
+useEffect(()=>{
+  const getNewAnnouncement =async ()=>{
+    try {
+      const response = await axios.get( `${import.meta.env.VITE_API_URL}/api/v1/event/getAnnouncement`)
+      setNewAnnouncement(response.data.message);
+      
+    } catch (error) {
+        toast.error("Failed to load Announcements");
+    }
+
+  }
+  getNewAnnouncement();
 },[])
 
   return (
@@ -54,10 +54,10 @@ useEffect(()=>{
           transition={{ duration: 0.6 }}
           className="p-6 w-full mx-auto"
         >
-          <h1 className="text-4xl font-extrabold mb-8 text-center text-blue-700 tracking-wide">
+          {/* <h1 className="text-4xl font-extrabold mb-8 text-center text-blue-700 tracking-wide">
             <FaCalendarAlt className="inline-block mr-3 text-blue-600" />
             Class Schedule & Events
-          </h1>
+          </h1> */}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
@@ -86,9 +86,12 @@ useEffect(()=>{
                         <FaChalkboardTeacher /> {item.teacher}
                       </p>
                     </div>
-                    <p className="text-gray-800 font-medium flex items-center gap-2">
+                    <div className='block items-center'>
+                      <p className="text-sm text-blue-800 font-bold text-end mb-2">{new Date(item.date).toLocaleDateString()}</p>
+                    <p className="text-gray-800 font-medium flex items-center gap-2 text-sm">
                       <FaClock /> {item.time}
                     </p>
+                    </div>
                   </motion.li>
                 ))}
               </ul>
@@ -104,7 +107,7 @@ useEffect(()=>{
               </h2>
 
               <ul className="space-y-4">
-                {announcements.map((item, index) => (
+                {newAnnouncement.map((item, index) => (
                   <motion.li
                     key={index}
                     initial={{ opacity: 0, x: 20 }}
@@ -113,7 +116,7 @@ useEffect(()=>{
                     className="border-l-4 border-blue-500 px-4 py-2 rounded-md bg-gray-100
                     hover:bg-blue-50 hover:shadow-md duration-200 cursor-pointer"
                   >
-                    <p className="text-sm text-blue-800 font-bold">{item.date}</p>
+                    <p className="text-sm text-blue-800 font-bold">{new Date(item.eventDate).toLocaleDateString()}</p>
                     <p className="text-gray-700">{item.message}</p>
                   </motion.li>
                 ))}
