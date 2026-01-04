@@ -7,7 +7,7 @@ function Mychart() {
         {/* <span>Attendance</span> */}
   
          <PieChart
-          className="w-52 h-48"
+          className="w-60 h-60 mt-7"
           data={[
             { title: "Active", value: 10, color: "#33cc33 " },
             { title: "InActive", value: 15, color: "yellow" },
