@@ -1,89 +1,12 @@
-// import React from 'react';
-// // import { Navbar } from '../../../src/components/index';
-// // import Sidenavbar from '../../../src/components/Sidenavbar';
-// import { Navbar } from '../components';
-// import Sidenavbar from '../components/Sidenavbar';
-// import { Box } from '@mui/material';
-
-// const ScheduleAndAnnouncements = () => {
-//   const schedule = [
-//     { time: "09:00 AM - 10:00 AM", subject: "Mathematics", teacher: "Mrs. Sharma" },
-//     { time: "10:15 AM - 11:15 AM", subject: "Science", teacher: "Mr. Verma" },
-//     { time: "11:30 AM - 12:30 PM", subject: "English", teacher: "Ms. Roy" },
-//     { time: "11:30 AM - 12:30 PM", subject: "English", teacher: "Ms. Roy" },
-//     { time: "11:30 AM - 12:30 PM", subject: "English", teacher: "Ms. Roy" },
-//     { time: "11:30 AM - 12:30 PM", subject: "English", teacher: "Ms. Roy" },
-//   ];
-
-//   const announcements = [
-//     { date: "2025-06-19", message: "Parent-teacher meeting scheduled for June 25." },
-//     { date: "2025-06-18", message: "Science project submission deadline is June 22." },
-//     { date: "2025-06-17", message: "Math Olympiad registration closes June 20." },
-//     { date: "2025-06-17", message: "Math Olympiad registration closes June 20." },
-//     { date: "2025-06-17", message: "Math Olympiad registration closes June 20." },
-//     { date: "2025-06-17", message: "Math Olympiad registration closes June 20." },
-//   ];
-
-//   return (
-//     <div>
-//       <Navbar />
-//       <Box height={75} />
-//       <Box sx={{ display: "flex" }}>
-//         <Sidenavbar />
-//         <div className="p-6 w-full mx-auto">
-//           <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">Class Schedule & Events</h1>
-
-//           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-//             {/* Class Schedule */}
-//             <div className="bg-white rounded-2xl shadow-lg px-6 py-3 border-2 border-orange-300">
-//               <h2 className="text-2xl font-semibold mb-8 py-4 px-3 border-b-2 text-orange-600">
-//                 Today's Class Schedule</h2>
-
-//               <ul className="space-y-4 ">
-//                 {schedule.map((item, index) => (
-//                   <li key={index} className="border-l-4 border-blue-500 pl-4 flex flex-row justify-between 
-//                   px-2 py-1 hover:bg-orange-50 rounded-r-lg ">
-//                     <div>
-//                     <p className="text-xl font-semibold font-serif">{item.subject} </p>
-//                     <p className="text-sm text-gray-600">by- {item.teacher} </p>
-//                     </div>
-//                     <p className="text-gray-700 font-medium">{item.time}</p>
-
-//                   </li>
-//                 ))}
-//               </ul>
-
-//             </div>
-
-//             {/* Announcements */}
-//             <div className="bg-white rounded-2xl shadow-lg px-6 py-3 border-2 border-orange-300">
-//               <h2 className="text-2xl font-semibold mb-8 py-4 px-3 border-b-2 text-orange-600">Events</h2>
-//               <ul className="space-y-4">
-//                 {announcements.map((item, index) => (
-//                   <li key={index} className=" border-l-4 border-blue-400 px-2 py-1 hover:bg-orange-50 rounded-r-lg">
-//                     <p className="text-sm text-blue-800 font-semibold">{item.date}</p>
-//                     <p className="text-gray-700">{item.message}</p>
-//                   </li>
-//                 ))}
-//               </ul>
-//             </div>
-//           </div>
-//         </div>
-//       </Box>
-//     </div>
-//   );
-// };
-
-// export default ScheduleAndAnnouncements;
-
-
-
 import React from 'react';
 import { Navbar } from '../components';
 import Sidenavbar from '../components/Sidenavbar';
 import { Box } from '@mui/material';
 import { motion } from "framer-motion";
 import { FaCalendarAlt, FaBullhorn, FaChalkboardTeacher, FaClock } from "react-icons/fa";
+import toast,{Toaster} from 'react-hot-toast';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const ScheduleAndAnnouncements = () => {
   const schedule = [
@@ -100,6 +23,23 @@ const ScheduleAndAnnouncements = () => {
     { date: "2025-06-17", message: "Math Olympiad registration closes June 20." },
     { date: "2025-06-16", message: "Sports Day practice from next week." },
   ];
+
+const [newSchedule,setNewSchedule] = useState([])
+
+useEffect(()=>{
+  const getNewSchedule =async ()=>{
+    try {
+      const response = await axios.get( `${import.meta.env.VITE_API_URL}/api/v1/schedule/getSchedule`)
+
+      setNewSchedule(response.data.message);
+      
+    } catch (error) {
+        toast.error("Failed to load Schedules");
+    }
+
+  }
+  getNewSchedule();
+},[])
 
   return (
     <div>
@@ -131,7 +71,7 @@ const ScheduleAndAnnouncements = () => {
               </h2>
 
               <ul className="space-y-4">
-                {schedule.map((item, index) => (
+                {newSchedule.map((item, index) => (
                   <motion.li
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
@@ -182,6 +122,8 @@ const ScheduleAndAnnouncements = () => {
           </div>
         </motion.div>
       </Box>
+      <Toaster/>
+      
     </div>
   );
 };

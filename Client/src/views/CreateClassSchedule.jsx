@@ -3,17 +3,14 @@ import { Navbar } from "../components";
 import Sidenavbar from "../components/Sidenavbar";
 import { Box } from "@mui/material";
 import { motion } from "framer-motion";
-import {
-  Clock,
-  BookOpen,
-  User,
-  CalendarDays,
-} from "lucide-react";
-import {Input} from "../components/index.js"
+import { Clock, BookOpen, User, CalendarDays } from "lucide-react";
+import { Input } from "../components/index.js";
 import axios from "axios";
-import toast ,{Toaster} from "react-hot-toast"
+import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateClassSchedule() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     subject: "",
     teacher: "",
@@ -22,32 +19,40 @@ export default function CreateClassSchedule() {
     endTime: "",
   });
 
-  const handleInputChange = async(e)=>{
- setForm({ ...form, [e.target.name]: e.target.value });
-  }
+  const handleInputChange = async (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = async (e) =>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const payload = {
-        subject :form.subject,
-        teacher:form.teacher,
-        date:form.date,
-        time: `${form.startTime} - ${form.endTime}`
+      subject: form.subject,
+      teacher: form.teacher,
+      date: form.date,
+      time: `${form.startTime} - ${form.endTime}`,
     };
 
     try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/schedule/createSchedule`,payload
-        );
-        console.log("Schedule created",response.data);
-        
-        
-    } catch (error) {
-        // toast.error(error.response?.data?.message || "Failed. Please try again.");
-    }
-  }
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/v1/schedule/createSchedule`,
+        payload
+      );
+      console.log("Schedule created", response.data.success);
+      if (response.data.success) {
+        toast.success("Schedule Added!!");
 
-   
+        setTimeout(() => {
+          navigate("/classEvents");
+        }, 1200);
+      } else {
+        toast.error(response.data.message || "Failed!");
+      }
+    
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed. Please try again.");
+    }
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen overflow-x-hidden">
@@ -129,8 +134,7 @@ export default function CreateClassSchedule() {
           </form>
         </motion.div>
       </Box>
-      <Toaster/>
+      <Toaster />
     </div>
   );
 }
-
