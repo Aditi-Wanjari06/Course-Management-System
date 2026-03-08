@@ -52,10 +52,11 @@ This project demonstrates **full-stack development skills**, including frontend 
 # 📷 Screenshots
 
 ### Login Page
-![Home](screenshots/home.png)
+![Login](Client/src/assets/ReadmeLoginPage.png)
 
 ### Dashboard
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](Client/src/assets/ReadmeDashboardPage.png)
+
 ---
 
 # ⚙️ Installation
